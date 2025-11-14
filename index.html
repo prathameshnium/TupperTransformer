@@ -138,12 +138,15 @@
                             <!-- Manual Full Transform -->
                             <div class="bg-white rounded-lg p-4 border border-gray-200">
                                 <h3 class="text-md font-semibold text-gray-800 mb-4 text-center">Full Transform (Hold to Animate)</h3>
+                                <p class="text-xs text-gray-500 text-center mb-3">Hold for 1 sec to "latch" animation.</p>
                                 <div class="grid grid-cols-2 gap-3">
                                     <button id="btnMoveUp" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Up</button>
                                     <button id="btnMoveDown" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Down</button>
                                     <button id="btnMoveLeft" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Left</button>
                                     <button id="btnMoveRight" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Right</button>
                                     <button id="btnMoveDiagUpRight" class="manual-anim-button col-span-2 bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Diag (Up-Right)</button>
+                                    <!-- NEW: Stop button for latched animation -->
+                                    <button id="btnStopManualAnim" class="col-span-2 bg-red-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-600 transition-colors hidden">Stop Manual Animation</button>
                                 </div>
                             </div>
                             <!-- Pixel Operation -->
@@ -305,8 +308,10 @@
             const btnMoveLeft = document.getElementById('btnMoveLeft');
             const btnMoveRight = document.getElementById('btnMoveRight');
             const btnMoveDiagUpRight = document.getElementById('btnMoveDiagUpRight');
-            // Array of buttons that can be held down
             const manualAnimButtons = [btnMoveUp, btnMoveDown, btnMoveLeft, btnMoveRight, btnMoveDiagUpRight];
+            
+            // NEW: Manual Stop Button
+            const btnStopManualAnim = document.getElementById('btnStopManualAnim');
 
             const inputPixelI = document.getElementById('pixel_i');
             const btnAddPixel = document.getElementById('btnAddPixel');
@@ -319,6 +324,7 @@
             const OFF_PIXEL_COLOR = '#f0f0f0';
             const ON_PIXEL_COLOR = '#000000';
             const ANIMATION_SPEED = 150; // ms for manual hold animation
+            const LATCH_TIME = 1000; // 1 second hold to latch
             
             const TUPPER_K = 960939379918958884971672962127852754715004339660129306651505519271702802395266424689642842174350718121267153782770623355993237280874144307891325963941337723487857735749823926629715517173716995165232890538221612403238855866184013235585136048828693337902491454229288667081096184496091705183454067827731551705405381627380967602565625016981482083418783163849115590225610003652351370343874461848378737238198224849863465033159410054974700593138339226497249461751545728366702369745461014655997933798537483143786841806593422227898388722980000748404719n;
             const UFO_CENTER_K = 443352924415299750269935582831006891736908292088519263818614474851967119874782775886465719557549939463756309785941884807127269950858601139076519485343718480093603142421094905794300356122213456551693296459008206217500505569300664030340014779960166914732789553875507120518890769928117177323414356728568578317831865211788253557426913017856n;
@@ -330,7 +336,9 @@
 
             // --- State Variables ---
             let ufoAnimationInterval = null;
-            let manualAnimationInterval = null; // For the hold-to-animate feature
+            let manualAnimationInterval = null; // For the 'hold' interval
+            let manualAnimationTimer = null; // For the 'latch' timeout
+            let isManualAnimationLatched = false; // Latch flag
             let currentTetrisPieceK = 0n; // Holds the transformed 'ks'
 
             /**
@@ -385,16 +393,41 @@
 
             /** Stops the manual hold-to-animate feature */
             function stopManualAnimation() {
+                // If the animation has "latched", don't stop it on mouseup.
+                // Only the "Stop Manual Animation" button can stop it.
+                if (isManualAnimationLatched) {
+                    return; 
+                }
+                
+                // If we release *before* the latch, clear both the interval and the latch timer.
                 if (manualAnimationInterval) {
                     clearInterval(manualAnimationInterval);
                     manualAnimationInterval = null;
                 }
+                if (manualAnimationTimer) {
+                    clearTimeout(manualAnimationTimer);
+                    manualAnimationTimer = null;
+                }
+            }
+
+            /** Forcibly stops any manual animation and resets latch state */
+            function forceStopManualAnimation() {
+                if (manualAnimationInterval) {
+                    clearInterval(manualAnimationInterval);
+                    manualAnimationInterval = null;
+                }
+                if (manualAnimationTimer) {
+                    clearTimeout(manualAnimationTimer);
+                    manualAnimationTimer = null;
+                }
+                isManualAnimationLatched = false;
+                btnStopManualAnim.classList.add('hidden'); // Hide the stop button
             }
 
             /** Stops ALL running animations */
             function stopAllAnimations() {
                 stopUFOAnimation();
-                stopManualAnimation();
+                forceStopManualAnimation();
             }
 
             /** Starts the UFO animation */
@@ -502,6 +535,7 @@
              */
             function startManualAnimation(transformFunction) {
                 stopAllAnimations(); // Stop any other animation
+                isManualAnimationLatched = false; // Reset latch
                 
                 let k = getCurrentK();
                 if (!k) return;
@@ -513,10 +547,16 @@
 
                 // Start the loop for continuous holding
                 manualAnimationInterval = setInterval(() => {
-                    k = transformFunction(k);
+                    k = transformFunction(k); // Note: 'k' is closed over, so it updates
                     updateK(k);
                     drawGrid(k);
                 }, ANIMATION_SPEED);
+                
+                // Start the timer to "latch" the animation
+                manualAnimationTimer = setTimeout(() => {
+                    isManualAnimationLatched = true;
+                    btnStopManualAnim.classList.remove('hidden'); // Show the stop button
+                }, LATCH_TIME); // 1-second hold to latch
             }
 
             // Define the small transform functions
@@ -544,12 +584,15 @@
             btnMoveDiagUpRight.addEventListener('mousedown', () => startManualAnimation(transformDiag));
             btnMoveDiagUpRight.addEventListener('touchstart', (e) => { e.preventDefault(); startManualAnimation(transformDiag); });
             
-            // Add stop listeners to all of them
+            // Add stop listeners (for release *before* latch) to all of them
             manualAnimButtons.forEach(button => {
                 stopEvents.forEach(event => {
                     button.addEventListener(event, stopManualAnimation);
                 });
             });
+
+            // NEW: Add listener for the "hard stop" button
+            btnStopManualAnim.addEventListener('click', forceStopManualAnimation);
 
 
             // --- Manual Click Listeners (Pixel Ops) ---
