@@ -12,11 +12,8 @@
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
-            /* This ensures the canvas scales to its container width */
             width: 100%;
-            /* This maintains the 106x17 aspect ratio */
             aspect-ratio: 106 / 17;
-            /* Set a background for the canvas itself to see white/off pixels */
             background-color: #f0f0f0;
         }
         /* Simple syntax highlighting for the BibTeX block */
@@ -36,21 +33,10 @@
         .token.atrule, .token.attr-value, .token.keyword { color: #859900; }
         .token.function, .token.class-name { color: #b58900; }
         .token.regex, .token.important, .token.variable { color: #cb4b16; }
-
-        /* Style for disabled buttons */
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        input:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen p-4 md:p-8 flex items-center justify-center font-sans">
 
-    <!-- Added `relative` for positioning the GitHub link -->
     <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 w-full max-w-4xl relative">
         
         <!-- GitHub Link -->
@@ -76,72 +62,73 @@
 
         <!-- K-Value Input -->
         <div class="mt-6">
-            <label for="k_value" class="block text-sm font-medium text-gray-700">K-Value:</label>
+            <label for="k_value" class="block text-sm font-medium text-gray-700">Current K-Value:</label>
             <textarea id="k_value" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 font-mono text-xs"></textarea>
         </div>
 
-        <!-- Animation Demo Section -->
-        <div class="mt-6 p-4 border border-blue-200 bg-blue-50 rounded-lg">
-             <h3 class="text-lg font-semibold text-blue-800 mb-4 text-center">Animation Demo (Eg3.1)</h3>
-             <div class="grid grid-cols-2 gap-4">
-                <button id="btnPlayUFOAnim" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors shadow-sm">Play UFO Animation</button>
-                <button id="btnStopAnim" class="w-full bg-gray-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-600 transition-colors shadow-sm">Stop Animation</button>
-             </div>
-        </div>
+        <!-- RESTRUCTURED: Main Demo Controls -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        <!-- NEW: Interactive Tetris Demo Section -->
-        <div class="mt-6 p-4 border border-orange-200 bg-orange-50 rounded-lg">
-             <h3 class="text-lg font-semibold text-orange-800 mb-4 text-center">Interactive Tetris (Eg3.2)</h3>
-             <div class="mb-4">
-                <button id="btnLoadInteractiveTetris" class="w-full bg-orange-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-orange-600 transition-colors shadow-sm">Load Interactive Tetris</button>
-             </div>
-             <div class="grid grid-cols-3 gap-3">
-                <button id="btnTetrisMoveLeft" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Piece Left</button>
-                <button id="btnTetrisMoveDown" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Piece Down</button>
-                <button id="btnTetrisMoveRight" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Piece Right</button>
-             </div>
-        </div>
-        
-        <!-- Controls Section -->
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            <!-- Group 1: Main Controls -->
-            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">Load Static Example</h3>
-                <div class="space-y-3">
-                    <button id="btnDraw" class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors shadow-sm">Draw from K-Value</button>
-                    <button id="btnLoadTupper" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors shadow-sm">Load Tupper's Formula</button>
-                    <button id="btnLoadUFOCenter" class="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-green-700 transition-colors shadow-sm">Load UFO (Center)</button>
-                    <button id="btnLoadUFOTopLeft" class="w-full bg-green-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-green-600 transition-colors shadow-sm">Load UFO (Top-Left)</button>
-                    <!-- FIX: Added the missing "Load Tetris (Static)" button -->
-                    <button id="btnLoadTetris" class="w-full bg-orange-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-orange-600 transition-colors shadow-sm">Load Tetris (Static)</button>
-                </div>
+            <!-- Mode 1: Animation Demo -->
+            <div class="p-4 border border-blue-200 bg-blue-50 rounded-lg">
+                 <h3 class="text-lg font-semibold text-blue-800 mb-4 text-center">Animation Demo (Eg3.1)</h3>
+                 <button id="btnToggleUFOAnim" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors shadow-sm">Stop UFO Animation</button>
             </div>
 
-            <!-- Group 2: Manual Controls -->
-            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">Manual Full Transform (n=1)</h3>
-                <div class="grid grid-cols-2 gap-3 mb-4">
-                    <button id="btnMoveUp" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Up</button>
-                    <button id="btnMoveDown" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Down</button>
-                    <button id="btnMoveLeft" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Left</button>
-                    <button id="btnMoveRight" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Right</button>
-                    <button id="btnMoveDiagUpRight" class="col-span-2 bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Diag (Up-Right)</button>
-                </div>
+            <!-- Mode 2: Interactive Tetris -->
+            <div class="p-4 border border-orange-200 bg-orange-50 rounded-lg">
+                 <h3 class="text-lg font-semibold text-orange-800 mb-4 text-center">Interactive Tetris (Eg3.2)</h3>
+                 <button id="btnLoadInteractiveTetris" class="w-full bg-orange-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-orange-600 transition-colors shadow-sm">Load Interactive Tetris</button>
+                 
+                 <!-- Tetris-specific controls, hidden by default -->
+                 <div id="tetrisControls" class="grid grid-cols-3 gap-3 mt-4 hidden">
+                    <button id="btnTetrisMoveLeft" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Piece Left</button>
+                    <button id="btnTetrisMoveDown" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Piece Down</button>
+                    <button id="btnTetrisMoveRight" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Piece Right</button>
+                 </div>
+            </div>
+
+            <!-- Mode 3: Static Load & Manual Controls -->
+            <div class="md:col-span-3 p-4 border border-gray-200 bg-gray-50 rounded-lg">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">Static Load & Manual Controls</h3>
                 
-                <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">Pixel Operation</h3>
-                <div>
-                    <label for="pixel_i" class="block text-sm font-medium text-gray-700">Pixel index (i):</label>
-                    <input type="number" id="pixel_i" value="1" min="1" max="1802" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                <!-- Static Load Buttons -->
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <button id="btnLoadStatic" class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors shadow-sm">Load Manual Mode</button>
+                    <button id="btnLoadTupper" class="w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-700 transition-colors shadow-sm">Load Tupper's</button>
+                    <button id="btnLoadUFOCenter" class="w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-700 transition-colors shadow-sm">Load UFO (Center)</button>
+                    <button id="btnLoadUFOTopLeft" class="w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-700 transition-colors shadow-sm">Load UFO (Top-Left)</button>
+                    <button id="btnLoadTetris" class="w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-700 transition-colors shadow-sm">Load Tetris (Static)</button>
                 </div>
-                <div class="grid grid-cols-2 gap-3 mt-3">
-                    <button id="btnAddPixel" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition-colors">Add (i)</button>
-                    <button id="btnRemovePixel" class="bg-red-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-600 transition-colors">Remove (i)</button>
+
+                <!-- Manual controls container, hidden by default -->
+                <div id="manualControlsContainer" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+                    <!-- Manual Full Transform -->
+                    <div class="bg-white rounded-lg p-4 border border-gray-200">
+                        <h3 class="text-md font-semibold text-gray-800 mb-4 text-center">Full Transform (n=1)</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button id="btnMoveUp" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Up</button>
+                            <button id="btnMoveDown" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Down</button>
+                            <button id="btnMoveLeft" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Left</button>
+                            <button id="btnMoveRight" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Right</button>
+                            <button id="btnMoveDiagUpRight" class="col-span-2 bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Diag (Up-Right)</button>
+                        </div>
+                    </div>
+                    <!-- Pixel Operation -->
+                    <div class="bg-white rounded-lg p-4 border border-gray-200">
+                        <h3 class="text-md font-semibold text-gray-800 mb-4 text-center">Pixel Operation</h3>
+                        <div>
+                            <label for="pixel_i" class="block text-sm font-medium text-gray-700">Pixel index (i):</label>
+                            <input type="number" id="pixel_i" value="1" min="1" max="1802" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mt-3">
+                            <button id="btnAddPixel" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition-colors">Add (i)</button>
+                            <button id="btnRemovePixel" class="bg-red-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-600 transition-colors">Remove (i)</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 
     <!-- "About" Modal -->
@@ -247,72 +234,40 @@
             const canvas = document.getElementById('tupperCanvas');
             const ctx = canvas.getContext('2d');
             const textarea = document.getElementById('k_value');
-            const inputPixelI = document.getElementById('pixel_i');
-
-            // --- Animation Buttons ---
-            const btnPlayUFOAnim = document.getElementById('btnPlayUFOAnim');
-            const btnStopAnim = document.getElementById('btnStopAnim');
-
-            // --- Tetris Buttons ---
-            const btnLoadInteractiveTetris = document.getElementById('btnLoadInteractiveTetris');
-            const btnTetrisMoveLeft = document.getElementById('btnTetrisMoveLeft');
-            const btnTetrisMoveRight = document.getElementById('btnTetrisMoveRight');
-            const btnTetrisMoveDown = document.getElementById('btnTetrisMoveDown');
-            const tetrisControls = [btnLoadInteractiveTetris, btnTetrisMoveLeft, btnTetrisMoveRight, btnTetrisMoveDown];
-
-            // --- Manual Control Buttons ---
-            const btnDraw = document.getElementById('btnDraw');
-            const btnLoadTupper = document.getElementById('btnLoadTupper');
-            const btnLoadUFOCenter = document.getElementById('btnLoadUFOCenter'); 
-            const btnLoadUFOTopLeft = document.getElementById('btnLoadUFOTopLeft'); 
-            const btnMoveUp = document.getElementById('btnMoveUp');
-            const btnMoveDown = document.getElementById('btnMoveDown');
-            const btnMoveLeft = document.getElementById('btnMoveLeft');
-            const btnMoveRight = document.getElementById('btnMoveRight');
-            const btnMoveDiagUpRight = document.getElementById('btnMoveDiagUpRight');
-            const btnAddPixel = document.getElementById('btnAddPixel');
-            const btnRemovePixel = document.getElementById('btnRemovePixel');
-            
-            // Renamed btnLoadTetris to btnLoadStaticTetris to avoid confusion
-            // And removed it from this list, as it's now part of the Tetris-specific controls.
-            // Oh, wait, the static load button is "Load Tetris Example" in the paper, but I removed it.
-            // Let's add it back to the main controls for completeness, but call it "Load Tetris (Static)"
-            // ...On second thought, the user just uploaded "Transformation_of_pixels_v2.pdf".
-            // Let me re-read the HTML.
-            // Ah, I *removed* the static "Load Tetris" button. That's confusing.
-            // The "Load Static Example" group has Tupper, UFO Center, UFO Top-Left. It's missing Tetris.
-            // The user's request *implies* the "Load Tetris Example" button from the previous version is now this new interactive one.
-            // Let me look at the HTML I just generated.
-            // I have:
-            // 1. Animation Demo (Play/Stop)
-            // 2. Interactive Tetris (Load, Move L/R/D)
-            // 3. Load Static Example (Draw, Tupper, UFO-C, UFO-TL)
-            // 4. Manual Full Transform (Move, Diag)
-            // 5. Pixel Operation (Add/Remove)
-            // This is confusing. The "Load Static Example" for Tetris is missing.
-            // Let's re-add the static "Load Tetris Example" button to the "Load Static Example" group.
-            // I'll update the HTML (line 123) and the JS (line 417, 432).
-            
-            // Re-reading... My previous HTML *did* have `btnLoadTetris` in the static group (line 123).
-            // But my JS `manualControls` list (line 432) *didn't* include it. That's a bug.
-            // And my HTML from the *previous* turn (user history) had `btnLoadTetris` in the *static* group.
-            // My *current* HTML (above in this turn) has it in the *static* group (line 123).
-            // OK, so the user's new request for "Interactive Tetris" should be a *separate* thing.
-            
-            // Let's fix the `manualControls` list first.
-            const btnLoadTetris = document.getElementById('btnLoadTetris'); // This was missing
-            
-            const manualControls = [
-                btnDraw, btnLoadTupper, btnLoadUFOCenter, btnLoadUFOTopLeft, btnLoadTetris,
-                btnMoveUp, btnMoveDown, btnMoveLeft, btnMoveRight, btnMoveDiagUpRight,
-                btnAddPixel, btnRemovePixel, inputPixelI, textarea
-            ];
 
             // --- Modal Elements ---
             const btnReadMore = document.getElementById('btnReadMore');
             const aboutModal = document.getElementById('aboutModal');
             const btnCloseModal = document.getElementById('btnCloseModal');
 
+            // --- Mode: Animation ---
+            const btnToggleUFOAnim = document.getElementById('btnToggleUFOAnim');
+            
+            // --- Mode: Tetris ---
+            const btnLoadInteractiveTetris = document.getElementById('btnLoadInteractiveTetris');
+            const tetrisControls = document.getElementById('tetrisControls');
+            const btnTetrisMoveLeft = document.getElementById('btnTetrisMoveLeft');
+            const btnTetrisMoveRight = document.getElementById('btnTetrisMoveRight');
+            const btnTetrisMoveDown = document.getElementById('btnTetrisMoveDown');
+
+            // --- Mode: Static / Manual ---
+            const manualControlsContainer = document.getElementById('manualControlsContainer');
+            const btnLoadStatic = document.getElementById('btnLoadStatic');
+            const btnLoadTupper = document.getElementById('btnLoadTupper');
+            const btnLoadUFOCenter = document.getElementById('btnLoadUFOCenter'); 
+            const btnLoadUFOTopLeft = document.getElementById('btnLoadUFOTopLeft'); 
+            const btnLoadTetris = document.getElementById('btnLoadTetris');
+            
+            const btnMoveUp = document.getElementById('btnMoveUp');
+            const btnMoveDown = document.getElementById('btnMoveDown');
+            const btnMoveLeft = document.getElementById('btnMoveLeft');
+            const btnMoveRight = document.getElementById('btnMoveRight');
+            const btnMoveDiagUpRight = document.getElementById('btnMoveDiagUpRight');
+
+            const inputPixelI = document.getElementById('pixel_i');
+            const btnAddPixel = document.getElementById('btnAddPixel');
+            const btnRemovePixel = document.getElementById('btnRemovePixel');
+            
             // --- Constants from your paper ---
             const GRID_WIDTH = 106;
             const GRID_HEIGHT = 17;
@@ -323,17 +278,14 @@
             const TUPPER_K = 960939379918958884971672962127852754715004339660129306651505519271702802395266424689642842174350718121267153782770623355993237280874144307891325963941337723487857735749823926629715517173716995165232890538221612403238855866184013235585136048828693337902491454229288667081096184496091705183454067827731551705405381627380967602565625016981482083418783163849115590225610003652351370343874461848378737238198224849863465033159410054974700593138339226497249461751545728366702369745461014655997933798537483143786841806593422227898388722980000748404719n;
             const UFO_CENTER_K = 443352924415299750269935582831006891736908292088519263818614474851967119874782775886465719557549939463756309785941884807127269950858601139076519485343718480093603142421094905794300356122213456551693296459008206217500505569300664030340014779960166914732789553875507120518890769928117177323414356728568578317831865211788253557426913017856n;
             const UFO_TOP_LEFT_K = 3364095144409490406402517685013936223230541008369211472154153567830130294784n;
-            
-            // Static Tetris k-value (Eg3.2, page 27)
             const TETRIS_K = 1465173377206481290603978943940929398476231106913779085087057445888553178199958383774730557179621883112187622163022999206490363706376270610806624193640467292297512962755602315569638442584502065254499445732887167500288n;
-
-            // --- NEW: Tetris Piece Constants (Eg3.2, page 29) ---
+            
+            // Tetris Piece Constants (Eg3.2, page 29)
             const KR_BIGINT = 1465173377163840840964195200776229452338097479160165100993321673778726174973516467105018733852068234022255298658975702245055915087238316041012593947856673785182723705258476099103213618090667396472262335593747367067648n;
             const KS_BIGINT = 42640449639783743164699946138133627753613984093735772109827003226441916669711823327553649089932323504047296961434448619137954569794030245783793507114789257497126216466424824493834668782237110139139800432640n;
 
             // --- State Variables ---
             let animationInterval = null;
-            let currentAnimationK = 0n;
             let currentTetrisPieceK = 0n; // Holds the transformed 'ks'
 
             /**
@@ -376,99 +328,100 @@
                 textarea.value = newK.toString();
             }
 
-            // --- NEW: Control Mode Functions ---
+            // --- Mode Switching Functions ---
 
-            /** Disables/enables all manual controls for full-image transforms */
-            function setManualControlsDisabled(disabled) {
-                manualControls.forEach(control => {
-                    control.disabled = disabled;
-                });
-            }
-
-            /** Disables/enables all controls for the Tetris piece */
-            function setTetrisControlsDisabled(disabled) {
-                // Keep the "Load" button active, disable the move buttons
-                btnTetrisMoveLeft.disabled = disabled;
-                btnTetrisMoveRight.disabled = disabled;
-                btnTetrisMoveDown.disabled = disabled;
-            }
-
-            /** Stops any running animation */
+            /** Stops the UFO animation */
             function stopAnimation() {
                 if (animationInterval) {
                     clearInterval(animationInterval);
                     animationInterval = null;
                 }
-                // Re-enable animation play button, disable stop
-                btnPlayUFOAnim.disabled = false;
-                btnStopAnim.disabled = true;
-            }
-            
-            /** Sets the application state to "Manual" mode */
-            function setManualMode() {
-                stopAnimation();
-                setManualControlsDisabled(false);
-                setTetrisControlsDisabled(true);
+                btnToggleUFOAnim.innerText = 'Play UFO Animation (Eg3.1)';
+                btnToggleUFOAnim.classList.replace('bg-red-500', 'bg-blue-600');
+                btnToggleUFOAnim.classList.replace('hover:bg-red-600', 'hover:bg-blue-700');
             }
 
-            /** Sets the application state to "Tetris" mode */
-            function setTetrisMode() {
-                stopAnimation();
-                setManualControlsDisabled(true); // Disable full-image controls
-                setTetrisControlsDisabled(false); // Enable piece-only controls
-            }
-
-            /** Sets the application state to "Animation" mode */
-            function setAnimationMode() {
-                setManualControlsDisabled(true);
-                setTetrisControlsDisabled(true);
-                btnPlayUFOAnim.disabled = true;
-                btnStopAnim.disabled = false;
-            }
-
-
-            /** Starts the Eg3.1 UFO Animation */
+            /** Starts the UFO animation */
             function playUFOAnimation() {
-                setAnimationMode();
+                stopAnimation(); // Clear any existing
+                // Set button text and style
+                btnToggleUFOAnim.innerText = 'Stop UFO Animation';
+                btnToggleUFOAnim.classList.replace('bg-blue-600', 'bg-red-500');
+                btnToggleUFOAnim.classList.replace('hover:bg-blue-700', 'hover:bg-red-600');
+
+                // Hide other control panels
+                tetrisControls.classList.add('hidden');
+                manualControlsContainer.classList.add('hidden');
                 
-                currentAnimationK = UFO_TOP_LEFT_K; 
-                updateK(currentAnimationK);
-                drawGrid(currentAnimationK);
+                let currentK = UFO_TOP_LEFT_K; 
+                updateK(currentK);
+                drawGrid(currentK);
                 
                 animationInterval = setInterval(() => {
                     // k' = k * 2^(1*17)
-                    currentAnimationK = currentAnimationK * (2n ** H_BIGINT);
-                    updateK(currentAnimationK);
-                    drawGrid(currentAnimationK);
+                    currentK = currentK * (2n ** H_BIGINT);
+                    updateK(currentK);
+                    drawGrid(currentK);
                 }, 300); 
             }
 
-            // --- Modal Event Listeners ---
-            btnReadMore.addEventListener('click', () => {
-                aboutModal.classList.remove('hidden');
-            });
-            btnCloseModal.addEventListener('click', () => {
-                aboutModal.classList.add('hidden');
-            });
-            aboutModal.addEventListener('click', (e) => {
-                if (e.target === aboutModal) {
-                    aboutModal.classList.add('hidden');
-                }
-            });
+            /** Loads the Tetris demo */
+            function loadTetrisDemo() {
+                stopAnimation();
+                manualControlsContainer.classList.add('hidden');
+                tetrisControls.classList.remove('hidden');
 
-            // --- Animation Listeners ---
-            btnPlayUFOAnim.addEventListener('click', playUFOAnimation);
-            btnStopAnim.addEventListener('click', setManualMode); // Stop just resets to manual
-
-            // --- NEW: Tetris Control Listeners ---
-            btnLoadInteractiveTetris.addEventListener('click', () => {
-                setTetrisMode();
                 currentTetrisPieceK = KS_BIGINT; // Reset piece to original ks
                 const totalK = KR_BIGINT + currentTetrisPieceK;
                 updateK(totalK);
                 drawGrid(totalK);
+            }
+
+            /** Loads the static/manual demo */
+            function loadManualMode(k_value) {
+                stopAnimation();
+                tetrisControls.classList.add('hidden');
+                manualControlsContainer.classList.remove('hidden');
+
+                updateK(k_value);
+                drawGrid(k_value);
+            }
+
+            // --- Modal Event Listeners ---
+            btnReadMore.addEventListener('click', () => aboutModal.classList.remove('hidden'));
+            btnCloseModal.addEventListener('click', () => aboutModal.classList.add('hidden'));
+            aboutModal.addEventListener('click', (e) => {
+                if (e.target === aboutModal) aboutModal.classList.add('hidden');
             });
 
+            // --- Primary Mode Button Listeners ---
+
+            // Animation Toggle
+            btnToggleUFOAnim.addEventListener('click', () => {
+                if (animationInterval) {
+                    stopAnimation();
+                } else {
+                    playUFOAnimation();
+                }
+            });
+
+            // Tetris Mode
+            btnLoadInteractiveTetris.addEventListener('click', loadTetrisDemo);
+
+            // Static/Manual Mode
+            btnLoadStatic.addEventListener('click', () => {
+                // Just shows the controls without loading a new K
+                stopAnimation();
+                tetrisControls.classList.add('hidden');
+                manualControlsContainer.classList.remove('hidden');
+            });
+            btnLoadTupper.addEventListener('click', () => loadManualMode(TUPPER_K));
+            btnLoadUFOCenter.addEventListener('click', () => loadManualMode(UFO_CENTER_K));
+            btnLoadUFOTopLeft.addEventListener('click', () => loadManualMode(UFO_TOP_LEFT_K));
+            btnLoadTetris.addEventListener('click', () => loadManualMode(TETRIS_K));
+
+
+            // --- Tetris Control Listeners (for k = kr + ks') ---
             btnTetrisMoveLeft.addEventListener('click', () => {
                 // k' = kr + (ks / 2^(1*17))
                 currentTetrisPieceK = currentTetrisPieceK / (2n ** H_BIGINT);
@@ -476,7 +429,6 @@
                 updateK(totalK);
                 drawGrid(totalK);
             });
-
             btnTetrisMoveRight.addEventListener('click', () => {
                 // k' = kr + (ks * 2^(1*17))
                 currentTetrisPieceK = currentTetrisPieceK * (2n ** H_BIGINT);
@@ -484,7 +436,6 @@
                 updateK(totalK);
                 drawGrid(totalK);
             });
-
             btnTetrisMoveDown.addEventListener('click', () => {
                 // k' = kr + (ks / 2^1)
                 currentTetrisPieceK = currentTetrisPieceK / 2n;
@@ -493,43 +444,10 @@
                 drawGrid(totalK);
             });
 
-
-            // --- Manual Control Event Listeners ---
-            btnDraw.addEventListener('click', () => {
-                setManualMode();
-                const k = getCurrentK();
-                if (k) drawGrid(k);
-            });
-            btnLoadTupper.addEventListener('click', () => {
-                setManualMode();
-                updateK(TUPPER_K);
-                drawGrid(TUPPER_K);
-            });
-            btnLoadUFOCenter.addEventListener('click', () => {
-                setManualMode();
-                updateK(UFO_CENTER_K);
-                drawGrid(UFO_CENTER_K);
-            });
-            btnLoadUFOTopLeft.addEventListener('click', () => {
-                setManualMode();
-                updateK(UFO_TOP_LEFT_K);
-                drawGrid(UFO_TOP_LEFT_K);
-            });
-            // Need to find the static tetris button...
-            // Ah, I see the confusion. The "Load Tetris Example" button (id: btnLoadTetris) was in the
-            // "Load Static Example" group in the HTML, but I forgot to add its event listener.
-            // I've added it back in the `manualControls` list, so now I need to add its listener.
-            
-            // FIX: This event listener was correct, but the button was missing from the HTML.
-            // The button has been added back to the HTML, so this code will now work.
-            btnLoadTetris.addEventListener('click', () => {
-                setManualMode();
-                updateK(TETRIS_K);
-                drawGrid(TETRIS_K);
-            });
-            
+            // --- Manual Control Event Listeners (for k' = transform(k)) ---
+            // These auto-stop animation and switch to manual mode
             btnMoveUp.addEventListener('click', () => {
-                setManualMode();
+                stopAnimation();
                 const k = getCurrentK();
                 if (!k) return;
                 const newK = k * 2n;
@@ -537,7 +455,7 @@
                 drawGrid(newK);
             });
             btnMoveDown.addEventListener('click', () => {
-                setManualMode();
+                stopAnimation();
                 const k = getCurrentK();
                 if (!k) return;
                 const newK = k / 2n;
@@ -545,7 +463,7 @@
                 drawGrid(newK);
             });
             btnMoveRight.addEventListener('click', () => {
-                setManualMode();
+                stopAnimation();
                 const k = getCurrentK();
                 if (!k) return;
                 const newK = k * (2n ** H_BIGINT);
@@ -553,7 +471,7 @@
                 drawGrid(newK);
             });
             btnMoveLeft.addEventListener('click', () => {
-                setManualMode();
+                stopAnimation();
                 const k = getCurrentK();
                 if (!k) return;
                 const newK = k / (2n ** H_BIGINT);
@@ -561,7 +479,7 @@
                 drawGrid(newK);
             });
             btnMoveDiagUpRight.addEventListener('click', () => {
-                setManualMode();
+                stopAnimation();
                 const k = getCurrentK();
                 if (!k) return;
                 const newK = (k * (2n ** H_BIGINT)) * 2n;
@@ -569,7 +487,7 @@
                 drawGrid(newK);
             });
             btnAddPixel.addEventListener('click', () => {
-                setManualMode();
+                stopAnimation();
                 const k = getCurrentK();
                 let i;
                 try {
@@ -585,7 +503,7 @@
                 drawGrid(newK);
             });
             btnRemovePixel.addEventListener('click', () => {
-                setManualMode();
+                stopAnimation();
                 const k = getCurrentK();
                 let i;
                 try {
