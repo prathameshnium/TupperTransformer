@@ -53,32 +53,16 @@
         #btnTetrisTab[aria-selected="true"] {
             @apply bg-orange-500;
         }
+        /* NEW: Draw tab color */
+        #btnDrawTab[aria-selected="true"] {
+            @apply bg-green-600;
+        }
         #btnManualTab[aria-selected="true"] {
             @apply bg-indigo-600;
         }
         /* Add user-select-none to prevent text highlighting when rapidly clicking/holding buttons */
         .manual-anim-button {
             @apply select-none;
-        }
-        
-        /* Custom Toggle Switch */
-        .toggle-switch {
-            @apply relative inline-flex items-center cursor-pointer;
-        }
-        .toggle-input {
-            @apply sr-only;
-        }
-        .toggle-label {
-            @apply block w-14 h-8 bg-gray-300 rounded-full transition-colors;
-        }
-        .toggle-input:checked + .toggle-label {
-            @apply bg-blue-600;
-        }
-        .toggle-input:checked + .toggle-label::after {
-            @apply translate-x-6;
-        }
-        .toggle-label::after {
-            @apply content-[''] absolute left-1 top-1 w-6 h-6 bg-white rounded-full shadow-md transition-transform;
         }
 
     </style>
@@ -95,8 +79,9 @@
         </a>
         
         <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-2">TupperTransformer</h1>
+        <!-- UPDATED: Added your name -->
         <p class="text-center text-gray-600 mb-6">
-            An interactive demo of the transformation algorithms from my 2018 paper.
+            An interactive demo by Prathamesh Deshmukh, based on his 2018 paper.
         </p>
 
         <!-- "Read More" Button -->
@@ -116,10 +101,11 @@
 
         <!-- Tabbed Control Interface -->
         <div class="mt-6">
-            <!-- Tab Buttons -->
-            <div class="grid grid-cols-3 gap-4" role="tablist">
+            <!-- UPDATED: Tab Buttons (4 cols) -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" role="tablist">
                 <button id="btnAnimTab" role="tab" aria-selected="true" class="tab-button">Animation (Eg3.1)</button>
                 <button id="btnTetrisTab" role="tab" aria-selected="false" class="tab-button">Interactive Tetris (Eg3.2)</button>
+                <button id="btnDrawTab" role="tab" aria-selected="false" class="tab-button">Draw</button>
                 <button id="btnManualTab" role="tab" aria-selected="false" class="tab-button">Manual Editor</button>
             </div>
 
@@ -147,8 +133,17 @@
                          </div>
                     </div>
                 </div>
+
+                <!-- NEW: Panel 3: Draw -->
+                <div id="drawPanel" role="tabpanel" class="hidden">
+                    <div class="p-4 border border-green-200 bg-green-50 rounded-lg text-center">
+                         <h3 class="text-lg font-semibold text-green-800 mb-4">Draw Mode</h3>
+                         <p class="text-green-700 mb-4 text-sm">Click or drag on the canvas to toggle pixels. The K-Value will update in real-time.</p>
+                         <button id="btnClearCanvas" class="w-full md:w-1/2 bg-gray-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-600 transition-colors shadow-sm">Clear Canvas</button>
+                    </div>
+                </div>
                 
-                <!-- Panel 3: Manual Editor -->
+                <!-- Panel 4: Manual Editor -->
                 <div id="manualPanel" role="tabpanel" class="hidden">
                     <div class="p-4 border border-gray-200 bg-gray-50 rounded-lg">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">Load Static Example</h3>
@@ -159,36 +154,17 @@
 
                         <hr class="my-6 border-gray-300">
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Manual Full Transform -->
-                            <div class="bg-white rounded-lg p-4 border border-gray-200">
-                                <h3 class="text-md font-semibold text-gray-800 mb-4 text-center">Full Transform (Hold to Animate)</h3>
-                                <p class="text-xs text-gray-500 text-center mb-3">Hold for 1 sec to "latch" animation.</p>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <button id="btnMoveUp" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Up</button>
-                                    <button id="btnMoveDown" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Down</button>
-                                    <button id="btnMoveLeft" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Left</button>
-                                    <button id="btnMoveRight" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Right</button>
-                                    <button id="btnMoveDiagUpRight" class="manual-anim-button col-span-2 bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Diag (Up-Right)</button>
-                                    <button id="btnStopManualAnim" class="col-span-2 bg-red-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-600 transition-colors hidden">Stop Manual Animation</button>
-                                </div>
+                        <div class="bg-white rounded-lg p-4 border border-gray-200">
+                            <h3 class="text-md font-semibold text-gray-800 mb-4 text-center">Full Transform (Hold to Animate)</h3>
+                            <p class="text-xs text-gray-500 text-center mb-3">Hold for 1 sec to "latch" animation.</p>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button id="btnMoveUp" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Up</button>
+                                <button id="btnMoveDown" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Down</button>
+                                <button id="btnMoveLeft" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Left</button>
+                                <button id="btnMoveRight" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Right</button>
+                                <button id="btnMoveDiagUpRight" class="manual-anim-button col-span-2 bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Diag (Up-Right)</button>
+                                <button id="btnStopManualAnim" class="col-span-2 bg-red-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-600 transition-colors hidden">Stop Manual Animation</button>
                             </div>
-                            
-                            <!-- NEW: Draw on Canvas Panel -->
-                            <div class="bg-white rounded-lg p-4 border border-gray-200">
-                                <h3 class="text-md font-semibold text-gray-800 mb-4 text-center">Draw on Canvas</h3>
-                                <div class="flex items-center justify-center space-x-3 mb-3">
-                                    <span class="text-gray-700 font-medium">Draw Mode:</span>
-                                    <label for="drawModeToggle" class="toggle-switch">
-                                        <input type="checkbox" id="drawModeToggle" class="toggle-input">
-                                        <span class="toggle-label"></span>
-                                    </label>
-                                </div>
-                                <p class="text-xs text-gray-500 text-center">
-                                    Turn on to click or drag on the canvas to toggle pixels and update the K-Value.
-                                </p>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -310,14 +286,16 @@
             // --- Tab Buttons ---
             const btnAnimTab = document.getElementById('btnAnimTab');
             const btnTetrisTab = document.getElementById('btnTetrisTab');
+            const btnDrawTab = document.getElementById('btnDrawTab'); // NEW
             const btnManualTab = document.getElementById('btnManualTab');
-            const tabs = [btnAnimTab, btnTetrisTab, btnManualTab];
+            const tabs = [btnAnimTab, btnTetrisTab, btnDrawTab, btnManualTab];
 
             // --- Tab Panels ---
             const animationPanel = document.getElementById('animationPanel');
             const tetrisPanel = document.getElementById('tetrisPanel');
+            const drawPanel = document.getElementById('drawPanel'); // NEW
             const manualPanel = document.getElementById('manualPanel');
-            const panels = [animationPanel, tetrisPanel, manualPanel];
+            const panels = [animationPanel, tetrisPanel, drawPanel, manualPanel];
 
             // --- Mode: Animation ---
             const btnStopAnim = document.getElementById('btnStopAnim');
@@ -326,6 +304,9 @@
             const btnTetrisMoveLeft = document.getElementById('btnTetrisMoveLeft');
             const btnTetrisMoveRight = document.getElementById('btnTetrisMoveRight');
             const btnTetrisMoveDown = document.getElementById('btnTetrisMoveDown');
+
+            // --- Mode: Draw ---
+            const btnClearCanvas = document.getElementById('btnClearCanvas'); // NEW
 
             // --- Mode: Static / Manual ---
             const btnLoadTupper = document.getElementById('btnLoadTupper');
@@ -340,9 +321,6 @@
             
             const btnStopManualAnim = document.getElementById('btnStopManualAnim');
 
-            // --- NEW: Draw Mode Elements ---
-            const drawModeToggle = document.getElementById('drawModeToggle');
-            
             // --- Constants from your paper ---
             const GRID_WIDTH = 106;
             const GRID_HEIGHT = 17;
@@ -367,7 +345,7 @@
             let isManualAnimationLatched = false; // Latch flag
             let currentTetrisPieceK = 0n; // Holds the transformed 'ks'
 
-            // --- NEW: Draw Mode State ---
+            // --- Draw Mode State ---
             let isDrawing = false;
             let drawnPixels = new Set(); // Prevents toggling the same pixel multiple times in one drag
             let currentK = 0n; // Local cache of k for drawing
@@ -481,6 +459,13 @@
                 
                 panelToShow.classList.remove('hidden');
                 tabToActivate.setAttribute('aria-selected', 'true');
+
+                // NEW: Automatically manage draw mode based on tab
+                if (tabToActivate === btnDrawTab) {
+                    canvas.classList.add('draw-mode-active');
+                } else {
+                    canvas.classList.remove('draw-mode-active');
+                }
             }
 
             /** Loads the Tetris demo */
@@ -490,6 +475,15 @@
                 const totalK = KR_BIGINT + currentTetrisPieceK;
                 updateK(totalK);
                 drawGrid(totalK);
+            }
+            
+            /** Loads the Draw demo */
+            function loadDrawMode() {
+                showPanel(drawPanel, btnDrawTab);
+                // Don't clear the canvas, let the user edit what's there
+                // Or maybe we should clear it? Let's clear it to 0n for a clean slate.
+                updateK(0n);
+                drawGrid(0n);
             }
 
             /** Loads the static/manual demo with a given K */
@@ -515,6 +509,13 @@
             // --- Primary Mode Tab Button Listeners ---
             btnAnimTab.addEventListener('click', showAnimationMode);
             btnTetrisTab.addEventListener('click', loadTetrisDemo);
+            btnDrawTab.addEventListener('click', () => { // NEW
+                const k = getCurrentK();
+                showPanel(drawPanel, btnDrawTab);
+                // Keep the k-value from the previous tab
+                updateK(k || 0n);
+                drawGrid(k || 0n);
+            });
             btnManualTab.addEventListener('click', () => {
                 const k = getCurrentK();
                 loadManualMode(k || UFO_CENTER_K);
@@ -548,6 +549,12 @@
                 const totalK = KR_BIGINT + currentTetrisPieceK;
                 updateK(totalK);
                 drawGrid(totalK);
+            });
+            
+            // --- NEW: Draw Mode Listeners ---
+            btnClearCanvas.addEventListener('click', () => {
+                updateK(0n);
+                drawGrid(0n);
             });
 
             // --- Manual Control Event Listeners (for k' = transform(k)) ---
@@ -610,25 +617,16 @@
 
             btnStopManualAnim.addEventListener('click', forceStopManualAnimation);
 
-            // --- NEW: Draw Mode Listeners ---
 
-            drawModeToggle.addEventListener('change', () => {
-                if (drawModeToggle.checked) {
-                    canvas.classList.add('draw-mode-active');
-                    // When enabling draw mode, stop all other animations and ensure we're in manual mode.
-                    const k = getCurrentK();
-                    loadManualMode(k || 0n); // Load manual mode with current K, or 0 if empty
-                } else {
-                    canvas.classList.remove('draw-mode-active');
-                }
-            });
+            // --- Draw Mode Canvas Listeners ---
 
             /**
              * Toggles a pixel on the canvas based on a mouse/touch event.
              * This is the reverse of your formula: it finds i from (x,y) and toggles the bit.
              */
             function handleDraw(event) {
-                if (!drawModeToggle.checked) return;
+                // Check if the draw tab is active
+                if (btnDrawTab.getAttribute('aria-selected') !== 'true') return;
 
                 const rect = canvas.getBoundingClientRect();
                 const scaleX = canvas.width / rect.width;
@@ -688,7 +686,7 @@
             }
 
             function startDrawing(event) {
-                if (!drawModeToggle.checked) return;
+                if (btnDrawTab.getAttribute('aria-selected') !== 'true') return;
                 event.preventDefault();
                 isDrawing = true;
                 drawnPixels.clear();
@@ -696,13 +694,13 @@
             }
 
             function draw(event) {
-                if (!drawModeToggle.checked || !isDrawing) return;
+                if (btnDrawTab.getAttribute('aria-selected') !== 'true' || !isDrawing) return;
                 event.preventDefault();
                 handleDraw(event);
             }
 
             function stopDrawing(event) {
-                if (!drawModeToggle.checked) return;
+                if (btnDrawTab.getAttribute('aria-selected') !== 'true') return;
                 event.preventDefault();
                 isDrawing = false;
                 drawnPixels.clear();
