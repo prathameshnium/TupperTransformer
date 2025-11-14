@@ -51,12 +51,15 @@
         #btnManualTab[aria-selected="true"] {
             @apply bg-indigo-600;
         }
+        /* Add user-select-none to prevent text highlighting when rapidly clicking/holding buttons */
+        .manual-anim-button {
+            @apply select-none;
+        }
 
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen p-4 md:p-8 flex items-center justify-center font-sans">
 
-    <!-- CHANGED: Reduced max-width from 4xl to 3xl for a more compact UI -->
     <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 w-full max-w-3xl relative">
         
         <!-- GitHub Link -->
@@ -124,7 +127,6 @@
                 <div id="manualPanel" role="tabpanel" class="hidden">
                     <div class="p-4 border border-gray-200 bg-gray-50 rounded-lg">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">Load Static Example</h3>
-                        <!-- CHANGED: Simplified grid to 2 cols. Removed UFO-TL and Tetris-Static buttons -->
                         <div class="grid grid-cols-2 gap-3">
                             <button id="btnLoadTupper" class="w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-700 transition-colors shadow-sm">Load Tupper's</button>
                             <button id="btnLoadUFOCenter" class="w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-700 transition-colors shadow-sm">Load UFO (Center)</button>
@@ -135,18 +137,18 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Manual Full Transform -->
                             <div class="bg-white rounded-lg p-4 border border-gray-200">
-                                <h3 class="text-md font-semibold text-gray-800 mb-4 text-center">Full Transform (n=1)</h3>
+                                <h3 class="text-md font-semibold text-gray-800 mb-4 text-center">Full Transform (Hold to Animate)</h3>
                                 <div class="grid grid-cols-2 gap-3">
-                                    <button id="btnMoveUp" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Up</button>
-                                    <button id="btnMoveDown" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Down</button>
-                                    <button id="btnMoveLeft" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Left</button>
-                                    <button id="btnMoveRight" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Right</button>
-                                    <button id="btnMoveDiagUpRight" class="col-span-2 bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Diag (Up-Right)</button>
+                                    <button id="btnMoveUp" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Up</button>
+                                    <button id="btnMoveDown" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Down</button>
+                                    <button id="btnMoveLeft" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Left</button>
+                                    <button id="btnMoveRight" class="manual-anim-button bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Right</button>
+                                    <button id="btnMoveDiagUpRight" class="manual-anim-button col-span-2 bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Move Diag (Up-Right)</button>
                                 </div>
                             </div>
                             <!-- Pixel Operation -->
                             <div class="bg-white rounded-lg p-4 border border-gray-200">
-                                <h3 class="text-md font-semibold text-gray-800 mb-4 text-center">Pixel Operation</h3>
+                                <h3 class="text-md font-semibold text-gray-800 mb-4 text-center">Pixel Operation (Click)</h3>
                                 <div>
                                     <label for="pixel_i" class="block text-sm font-medium text-gray-700">Pixel index (i):</label>
                                     <input type="number" id="pixel_i" value="1" min="1" max="1802" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
@@ -297,13 +299,14 @@
             // --- Mode: Static / Manual ---
             const btnLoadTupper = document.getElementById('btnLoadTupper');
             const btnLoadUFOCenter = document.getElementById('btnLoadUFOCenter'); 
-            // CHANGED: Removed btnLoadUFOTopLeft and btnLoadTetris
             
             const btnMoveUp = document.getElementById('btnMoveUp');
             const btnMoveDown = document.getElementById('btnMoveDown');
             const btnMoveLeft = document.getElementById('btnMoveLeft');
             const btnMoveRight = document.getElementById('btnMoveRight');
             const btnMoveDiagUpRight = document.getElementById('btnMoveDiagUpRight');
+            // Array of buttons that can be held down
+            const manualAnimButtons = [btnMoveUp, btnMoveDown, btnMoveLeft, btnMoveRight, btnMoveDiagUpRight];
 
             const inputPixelI = document.getElementById('pixel_i');
             const btnAddPixel = document.getElementById('btnAddPixel');
@@ -315,19 +318,19 @@
             const H_BIGINT = BigInt(GRID_HEIGHT); // 17n
             const OFF_PIXEL_COLOR = '#f0f0f0';
             const ON_PIXEL_COLOR = '#000000';
+            const ANIMATION_SPEED = 150; // ms for manual hold animation
             
             const TUPPER_K = 960939379918958884971672962127852754715004339660129306651505519271702802395266424689642842174350718121267153782770623355993237280874144307891325963941337723487857735749823926629715517173716995165232890538221612403238855866184013235585136048828693337902491454229288667081096184496091705183454067827731551705405381627380967602565625016981482083418783163849115590225610003652351370343874461848378737238198224849863465033159410054974700593138339226497249461751545728366702369745461014655997933798537483143786841806593422227898388722980000748404719n;
             const UFO_CENTER_K = 443352924415299750269935582831006891736908292088519263818614474851967119874782775886465719557549939463756309785941884807127269950858601139076519485343718480093603142421094905794300356122213456551693296459008206217500505569300664030340014779960166914732789553875507120518890769928117177323414356728568578317831865211788253557426913017856n;
             const UFO_TOP_LEFT_K = 3364095144409490406402517685013936223230541008369211472154153567830130294784n;
-            // This k-value is still needed for the Tetris *tab*, just not for a static load button
-            const TETRIS_K = 1465173377206481290603978943940929398476231106913779085087057445888553178199958383774730557179621883112187622163022999206490363706376270610806624193640467292297512962755602315569638442584502065254499445732887167500288n;
             
             // Tetris Piece Constants (Eg3.2, page 29)
             const KR_BIGINT = 1465173377163840840964195200776229452338097479160165100993321673778726174973516467105018733852068234022255298658975702245055915087238316041012593947856673785182723705258476099103213618090667396472262335593747367067648n;
             const KS_BIGINT = 42640449639783743164699946138133627753613984093735772109827003226441916669711823327553649089932323504047296961434448619137954569794030245783793507114789257497126216466424824493834668782237110139139800432640n;
 
             // --- State Variables ---
-            let animationInterval = null;
+            let ufoAnimationInterval = null;
+            let manualAnimationInterval = null; // For the hold-to-animate feature
             let currentTetrisPieceK = 0n; // Holds the transformed 'ks'
 
             /**
@@ -372,12 +375,26 @@
 
             // --- Mode Switching Functions ---
 
-            /** Stops the UFO animation */
-            function stopAnimation() {
-                if (animationInterval) {
-                    clearInterval(animationInterval);
-                    animationInterval = null;
+            /** Stops the main UFO animation */
+            function stopUFOAnimation() {
+                if (ufoAnimationInterval) {
+                    clearInterval(ufoAnimationInterval);
+                    ufoAnimationInterval = null;
                 }
+            }
+
+            /** Stops the manual hold-to-animate feature */
+            function stopManualAnimation() {
+                if (manualAnimationInterval) {
+                    clearInterval(manualAnimationInterval);
+                    manualAnimationInterval = null;
+                }
+            }
+
+            /** Stops ALL running animations */
+            function stopAllAnimations() {
+                stopUFOAnimation();
+                stopManualAnimation();
             }
 
             /** Starts the UFO animation */
@@ -386,7 +403,7 @@
                 updateK(currentK);
                 drawGrid(currentK);
                 
-                animationInterval = setInterval(() => {
+                ufoAnimationInterval = setInterval(() => {
                     // k' = k * 2^(1*17)
                     currentK = currentK * (2n ** H_BIGINT);
                     updateK(currentK);
@@ -396,7 +413,7 @@
 
             /** Updates the UI to show the correct panel for the selected tab */
             function showPanel(panelToShow, tabToActivate) {
-                stopAnimation();
+                stopAllAnimations();
                 
                 panels.forEach(panel => panel.classList.add('hidden'));
                 tabs.forEach(tab => tab.setAttribute('aria-selected', 'false'));
@@ -452,7 +469,6 @@
             // --- Static Load Button Listeners (inside Manual Panel) ---
             btnLoadTupper.addEventListener('click', () => loadManualMode(TUPPER_K));
             btnLoadUFOCenter.addEventListener('click', () => loadManualMode(UFO_CENTER_K));
-            // CHANGED: Removed listeners for btnLoadUFOTopLeft and btnLoadTetris
 
 
             // --- Tetris Control Listeners (for k = kr + ks') ---
@@ -479,42 +495,67 @@
             });
 
             // --- Manual Control Event Listeners (for k' = transform(k)) ---
-            btnMoveUp.addEventListener('click', () => {
-                const k = getCurrentK();
+
+            /**
+             * NEW: Helper function to start a manual animation loop
+             * @param {function(bigint): bigint} transformFunction - A function that takes a k and returns a new k
+             */
+            function startManualAnimation(transformFunction) {
+                stopAllAnimations(); // Stop any other animation
+                
+                let k = getCurrentK();
                 if (!k) return;
-                const newK = k * 2n;
-                updateK(newK);
-                drawGrid(newK);
+
+                // Apply the first transform immediately on mousedown
+                k = transformFunction(k);
+                updateK(k);
+                drawGrid(k);
+
+                // Start the loop for continuous holding
+                manualAnimationInterval = setInterval(() => {
+                    k = transformFunction(k);
+                    updateK(k);
+                    drawGrid(k);
+                }, ANIMATION_SPEED);
+            }
+
+            // Define the small transform functions
+            const transformUp = (k) => k * 2n;
+            const transformDown = (k) => k / 2n;
+            const transformLeft = (k) => k / (2n ** H_BIGINT);
+            const transformRight = (k) => k * (2n ** H_BIGINT);
+            const transformDiag = (k) => (k * (2n ** H_BIGINT)) * 2n; // Up-Right
+
+            // Wire up all manual animation buttons
+            const stopEvents = ['mouseup', 'mouseleave', 'touchend'];
+            
+            btnMoveUp.addEventListener('mousedown', () => startManualAnimation(transformUp));
+            btnMoveUp.addEventListener('touchstart', (e) => { e.preventDefault(); startManualAnimation(transformUp); });
+            
+            btnMoveDown.addEventListener('mousedown', () => startManualAnimation(transformDown));
+            btnMoveDown.addEventListener('touchstart', (e) => { e.preventDefault(); startManualAnimation(transformDown); });
+            
+            btnMoveLeft.addEventListener('mousedown', () => startManualAnimation(transformLeft));
+            btnMoveLeft.addEventListener('touchstart', (e) => { e.preventDefault(); startManualAnimation(transformLeft); });
+            
+            btnMoveRight.addEventListener('mousedown', () => startManualAnimation(transformRight));
+            btnMoveRight.addEventListener('touchstart', (e) => { e.preventDefault(); startManualAnimation(transformRight); });
+            
+            btnMoveDiagUpRight.addEventListener('mousedown', () => startManualAnimation(transformDiag));
+            btnMoveDiagUpRight.addEventListener('touchstart', (e) => { e.preventDefault(); startManualAnimation(transformDiag); });
+            
+            // Add stop listeners to all of them
+            manualAnimButtons.forEach(button => {
+                stopEvents.forEach(event => {
+                    button.addEventListener(event, stopManualAnimation);
+                });
             });
-            btnMoveDown.addEventListener('click', () => {
-                const k = getCurrentK();
-                if (!k) return;
-                const newK = k / 2n;
-                updateK(newK);
-                drawGrid(newK);
-            });
-            btnMoveRight.addEventListener('click', () => {
-                const k = getCurrentK();
-                if (!k) return;
-                const newK = k * (2n ** H_BIGINT);
-                updateK(newK);
-                drawGrid(newK);
-            });
-            btnMoveLeft.addEventListener('click', () => {
-                const k = getCurrentK();
-                if (!k) return;
-                const newK = k / (2n ** H_BIGINT);
-                updateK(newK);
-                drawGrid(newK);
-            });
-            btnMoveDiagUpRight.addEventListener('click', () => {
-                const k = getCurrentK();
-                if (!k) return;
-                const newK = (k * (2n ** H_BIGINT)) * 2n;
-                updateK(newK);
-                drawGrid(newK);
-            });
+
+
+            // --- Manual Click Listeners (Pixel Ops) ---
+            // These are still single-click
             btnAddPixel.addEventListener('click', () => {
+                stopAllAnimations(); // Stop any hold-to-animate
                 const k = getCurrentK();
                 let i;
                 try {
@@ -530,6 +571,7 @@
                 drawGrid(newK);
             });
             btnRemovePixel.addEventListener('click', () => {
+                stopAllAnimations(); // Stop any hold-to-animate
                 const k = getCurrentK();
                 let i;
                 try {
