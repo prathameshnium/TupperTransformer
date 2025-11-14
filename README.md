@@ -109,6 +109,35 @@ For a full list of publication details, indexing, and archive links, please see 
 -   [Numberphile: The 'Everything' Formula](https://youtu.be/_s5RFgd59ao)
 -   [Tupper's Original Paper (Self-Referential Formula)](http://campus.lakeforest.edu/trevino/Tupper_Paper.pdf)
 
+## Technologies Used
+
+The interactive demo is built with standard web technologies:
+
+-   **HTML5:** For the structure of the web page.
+-   **CSS3:** For styling the user interface.
+-   **JavaScript (ES6+):** For the core logic of the TupperTransformer algorithm and user interactions.
+-   **BigInt:** Natively handled in modern JavaScript for the high-precision integer arithmetic required for the k-value.
+
+## Project Structure
+
+The repository is organized as follows:
+
+```
+.
+├── paper/
+├── CITATION.md
+├── index.html
+├── License
+├── README.md
+```
+
+-   `paper/`: Contains the original 2018 preprint that this project is based on.
+-   `index.html`, `style.css`, `script.js`: The core files for the interactive web demo.
+-   `CITATION.md`: Provides detailed citation information for academic use.
+-   `License`: The MIT license for the project.
+-   `README.md`: This documentation file.
+
+
 ## Contributing
 
 I am open to suggestions and collaborations. If you have any ideas or would like to discuss implementing this research, please feel free to open an issue to start a conversation.
@@ -116,3 +145,31 @@ I am open to suggestions and collaborations. If you have any ideas or would like
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](License) file for details.
+
+## Categories & Keywords
+
+*(From Figshare)*
+
+### Categories
+
+-   Theory of computation 
+-   Applied computing 
+-   Image processing
+-   Applied mathematics 
+
+### Keywords
+
+-   tuppers-formula
+-   tuppers-self-referential-formula
+-   image-processing
+-   algorithm
+-   math
+-   theory-of-computation
+-   applied-computing
+-   applied-mathematics
+-   computation-theory
+-   applied-computer-science
+-   javascript
+-   interactive-demo
+-   preprint
+-   bigint
