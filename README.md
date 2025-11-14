@@ -1,5 +1,11 @@
 # TupperTransformer (A Novel Image Processing Algorithm)
 
+<p align="center">
+  <a href="License"><img alt="GitHub" src="https://img.shields.io/github/license/Prathameshnium/TupperTransformer"></a>
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Prathameshnium/TupperTransformer">
+  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Prathameshnium/TupperTransformer">
+</p>
+
 > **Note:** This project is in a very early, experimental stage.
 
 Welcome to my repository. This project is my exploration of a new image processing technique based on my 2018 preprint, "Transformation of the pixels in Tupper's self-referential formula."
@@ -102,3 +108,11 @@ For a full list of publication details, indexing, and archive links, please see 
 -   [Tupper's Formula Tools (defunct)](http://tuppers-formula.tk)
 -   [Numberphile: The 'Everything' Formula](https://youtu.be/_s5RFgd59ao)
 -   [Tupper's Original Paper (Self-Referential Formula)](http://campus.lakeforest.edu/trevino/Tupper_Paper.pdf)
+
+## Contributing
+
+I am open to suggestions and collaborations. If you have any ideas or would like to discuss implementing this research, please feel free to open an issue to start a conversation.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](License) file for details.
