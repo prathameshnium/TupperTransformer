@@ -94,7 +94,7 @@
         
         <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-2">TupperTransformer</h1>
         <p class="text-center text-gray-600 mb-6">
-            An interactive demo of my Tupper's function transformation algorithm (pre-print @ 2018), -Prathamesh Deshmukh.
+            An interactive demo of my Tupper's function transformation algorithm (<a href="https://figshare.com/articles/preprint/Transformation_of_pixels_pdf/6373046/2?file=11711468" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">pre-print @ 2018</a>), -Prathamesh Deshmukh.
         </p>
         <div class="text-center text-gray-600 mb-6 text-lg" id="tupper-formula">
             $$ \frac{1}{2} < \left\lfloor \operatorname{mod}\left(\left\lfloor \frac{y}{17} \right\rfloor 2^{-17\lfloor x \rfloor - \operatorname{mod}(\lfloor y \rfloor, 17)}, 2\right) \right\rfloor $$
@@ -138,19 +138,42 @@
 
             <!-- Right Column -->
             <div class="md:col-span-1 space-y-6">
-                <!-- Accordion Item 1: Load -->
+                <!-- Accordion Item 1: Demos & Examples -->
                 <div>
                     <h2 id="accordion-heading-1">
                         <button type="button" class="accordion-button flex items-center justify-between w-full p-5 font-medium text-left text-gray-700 bg-gray-100 border border-gray-200 rounded-t-xl hover:bg-gray-200" data-accordion-target="#accordion-body-1" aria-expanded="true" aria-controls="accordion-body-1">
-                            <span>1. Load an Example</span>
+                            <span>1. Demos & Examples</span>
                             <svg class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                         </button>
                     </h2>
                     <div id="accordion-body-1" class="p-5 border border-t-0 border-gray-200">
-                        <p class="mb-4 text-sm text-gray-600">Start by loading a pre-defined pattern.</p>
+                        <p class="mb-4 text-sm text-gray-600">Load a pre-defined pattern or watch a demo.</p>
                         <div class="grid grid-cols-2 gap-3">
                             <button id="btnLoadTupper" class="w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-700 transition-colors shadow-sm">Load Tupper's</button>
                             <button id="btnLoadUFOCenter" class="w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-700 transition-colors shadow-sm">Load UFO (Center)</button>
+                        </div>
+                        <hr class="my-6 border-gray-300">
+                        <div class="p-4 border border-blue-200 bg-blue-50 rounded-lg text-center mb-6">
+                             <h3 class="text-lg font-semibold text-blue-800 mb-4">Animation Demo (Eg3.1)</h3>
+                             <p class="text-blue-700 mb-4 text-sm">Plays the "Top-Left UFO" animation from the paper.</p>
+                             <button id="btnToggleUFOAnim" class="w-full md:w-1/2 bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors shadow-sm">Play UFO Animation</button>
+                        </div>
+                        <div class="p-4 border border-orange-200 bg-orange-50 rounded-lg">
+                             <h3 class="text-lg font-semibold text-orange-800 mb-4 text-center">Interactive Tetris (Eg3.2)</h3>
+                             <div class="text-center mb-4">
+                                 <button id="btnLoadTetris" class="w-full md:w-1/2 bg-orange-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-orange-600 transition-colors shadow-sm">Load Tetris Example</button>
+                             </div>
+                             <p class="text-orange-700 mb-4 text-sm text-center">After loading, use these buttons to transform the L-piece (ks) independently from the resting pieces (kr).</p>
+                             <div class="grid grid-cols-3 gap-3 mt-4 max-w-md mx-auto">
+                                <button id="btnTetrisMoveLeft" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Piece Left</button>
+                                <button id="btnTetrisMoveDown" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Piece Down</button>
+                                <button id="btnTetrisMoveRight" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Piece Right</button>
+                             </div>
+                        </div>
+                        <div class="p-4 border border-purple-200 bg-purple-50 rounded-lg text-center mt-6">
+                             <h3 class="text-lg font-semibold text-purple-800 mb-4">Library of Babel</h3>
+                             <p class="text-purple-700 mb-4 text-sm">Continuously generates random K-values.</p>
+                             <button id="btnToggleBabel" class="w-full md:w-1/2 bg-purple-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-purple-700 transition-colors shadow-sm">Start Library of Babel</button>
                         </div>
                     </div>
                 </div>
@@ -167,36 +190,6 @@
                         <p class="mb-4 text-sm text-gray-600">Drawing is enabled by default. Click the button to disable it.</p>
                         <button id="btnEnableDraw" class="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-green-700 transition-colors shadow-sm">Enable Draw Mode</button>
                         <button id="btnClearCanvas" class="w-full mt-3 bg-gray-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-600 transition-colors shadow-sm">Clear Canvas</button>
-                    </div>
-                </div>
-
-                <!-- Accordion Item 3: Demos -->
-                <div>
-                    <h2 id="accordion-heading-3">
-                        <button type="button" class="accordion-button flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-b-0 border-gray-200 hover:bg-gray-200" data-accordion-target="#accordion-body-3" aria-expanded="false" aria-controls="accordion-body-3">
-                            <span>3. Watch Demos</span>
-                            <svg class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                        </button>
-                    </h2>
-                    <div id="accordion-body-3" class="hidden p-5 border border-gray-200 rounded-b-xl">
-                        <div class="p-4 border border-blue-200 bg-blue-50 rounded-lg text-center mb-6">
-                             <h3 class="text-lg font-semibold text-blue-800 mb-4">Animation Demo (Eg3.1)</h3>
-                             <p class="text-blue-700 mb-4 text-sm">Plays the "Top-Left UFO" animation from the paper.</p>
-                             <button id="btnToggleUFOAnim" class="w-full md:w-1/2 bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors shadow-sm">Play UFO Animation</button>
-                        </div>
-                        
-                        <div class="p-4 border border-orange-200 bg-orange-50 rounded-lg">
-                             <h3 class="text-lg font-semibold text-orange-800 mb-4 text-center">Interactive Tetris (Eg3.2)</h3>
-                             <div class="text-center mb-4">
-                                 <button id="btnLoadTetris" class="w-full md:w-1/2 bg-orange-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-orange-600 transition-colors shadow-sm">Load Tetris Example</button>
-                             </div>
-                             <p class="text-orange-700 mb-4 text-sm text-center">After loading, use these buttons to transform the L-piece (ks) independently from the resting pieces (kr).</p>
-                             <div class="grid grid-cols-3 gap-3 mt-4 max-w-md mx-auto">
-                                <button id="btnTetrisMoveLeft" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Piece Left</button>
-                                <button id="btnTetrisMoveDown" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Piece Down</button>
-                                <button id="btnTetrisMoveRight" class="w-full bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-800 transition-colors">Piece Right</button>
-                             </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -339,6 +332,7 @@
             const btnEnableDraw = document.getElementById('btnEnableDraw');
             const btnClearCanvas = document.getElementById('btnClearCanvas');
             const btnToggleUFOAnim = document.getElementById('btnToggleUFOAnim');
+            const btnToggleBabel = document.getElementById('btnToggleBabel');
             const btnLoadTetris = document.getElementById('btnLoadTetris');
             const btnTetrisMoveLeft = document.getElementById('btnTetrisMoveLeft');
             const btnTetrisMoveRight = document.getElementById('btnTetrisMoveRight');
@@ -370,6 +364,7 @@
 
             // --- State ---
             let ufoAnimationInterval = null;
+            let babelAnimationInterval = null;
             let manualAnimationInterval = null;
             let manualAnimationTimer = null;
             let isManualAnimationLatched = false;
@@ -424,7 +419,10 @@
             function stopAllAnimations() {
                 if (ufoAnimationInterval) clearInterval(ufoAnimationInterval);
                 ufoAnimationInterval = null;
+                if (babelAnimationInterval) clearInterval(babelAnimationInterval);
+                babelAnimationInterval = null;
                 btnToggleUFOAnim.textContent = "Play UFO Animation";
+                btnToggleBabel.textContent = "Start Library of Babel";
                 forceStopManualAnimation();
             }
             
@@ -507,6 +505,29 @@
             btnTetrisMoveDown.addEventListener('click', () => {
                 currentTetrisPieceK /= 2n;
                 drawGrid(KR_BIGINT + currentTetrisPieceK);
+            });
+
+            function getRandomK() {
+                let k_string = '';
+                const num_digits = 537;
+                for (let i = 0; i < num_digits; i++) {
+                    k_string += Math.floor(Math.random() * 10);
+                }
+                return BigInt(k_string);
+            }
+
+            btnToggleBabel.addEventListener('click', () => {
+                if (babelAnimationInterval) {
+                    stopAllAnimations();
+                } else {
+                    stopAllAnimations();
+                    babelAnimationInterval = setInterval(() => {
+                        const randomK = getRandomK();
+                        updateK(randomK);
+                        drawGrid(randomK);
+                    }, 200);
+                    btnToggleBabel.textContent = "Stop Library of Babel";
+                }
             });
 
             // --- Manual Transform ---
