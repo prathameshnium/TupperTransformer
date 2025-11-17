@@ -89,6 +89,39 @@
             border-radius: 0.5rem;
         }
 
+        /* New styles for the plot */
+        .plot-container {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        .y-axis-label-top {
+            text-align: left;
+            font-size: 0.875rem;
+            color: #374151;
+            font-weight: 500;
+        }
+        .y-axis-label-bottom {
+            text-align: left;
+            font-size: 0.875rem;
+            color: #374151;
+            font-weight: 500;
+        }
+        .x-axis-label {
+            text-align: center;
+            font-size: 0.875rem;
+            color: #374151;
+            font-weight: 500;
+        }
+        #tupperCanvas {
+            width: 100%;
+            height: auto;
+        }
+
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen p-4 md:p-8 flex items-center justify-center font-sans">
@@ -121,8 +154,13 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
             <!-- Left Column -->
             <div class="lg:col-span-2">
-                <div class="bg-gray-200 rounded-lg p-2 overflow-hidden">
+                <div class="plot-container">
+                    <div class="y-axis-label-top">k+17</div>
                     <canvas id="tupperCanvas" width="1060" height="170"></canvas>
+                    <div class="flex justify-between">
+                        <div class="y-axis-label-bottom">k</div>
+                        <div class="x-axis-label">x</div>
+                    </div>
                 </div>
                 <p class="text-xs text-gray-500 text-center mt-2 italic">
                     You can also draw directly on the plot to create your own patterns.
@@ -369,6 +407,8 @@
             const canvas = document.getElementById('tupperCanvas');
             const ctx = canvas.getContext('2d');
             const textarea = document.getElementById('k_value');
+            const yAxisLabelTop = document.querySelector('.y-axis-label-top');
+            const yAxisLabelBottom = document.querySelector('.y-axis-label-bottom');
 
             // --- Modal Elements ---
             const btnReadMore = document.getElementById('btnReadMore');
@@ -434,17 +474,19 @@
                     return;
                 }
                 currentK = k;
-                ctx.fillStyle = OFF_PIXEL_COLOR;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 const k_div_17 = k / H_BIGINT;
+                
                 ctx.strokeStyle = GRID_COLOR;
                 ctx.lineWidth = 1;
+
                 for (let x = 0; x < GRID_WIDTH; x++) {
                     for (let y = 0; y < GRID_HEIGHT; y++) {
                         const bit_position = BigInt(x * GRID_HEIGHT + y);
                         const bit = (k_div_17 >> bit_position) & 1n;
                         const drawX = x * PIXEL_SCALE;
                         const drawY = (GRID_HEIGHT - 1 - y) * PIXEL_SCALE;
+
                         if (bit === 1n) {
                             ctx.fillStyle = ON_PIXEL_COLOR;
                             ctx.fillRect(drawX, drawY, PIXEL_SCALE, PIXEL_SCALE);
@@ -468,6 +510,8 @@
             function updateK(newK) {
                 textarea.value = newK.toString();
                 currentK = newK;
+                yAxisLabelTop.textContent = 'k+17';
+                yAxisLabelBottom.textContent = 'k';
             }
 
             // --- Debounce for manual input ---
